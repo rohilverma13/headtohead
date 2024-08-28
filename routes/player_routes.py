@@ -39,11 +39,11 @@ def player_info():
     season1 = data.get('season1')
     season2 = data.get('season2')
 
-    player1_id = get_player_id(player1_name)
-    player2_id = get_player_id(player2_name)
+    # player1_id = get_player_id(player1_name)
+    # player2_id = get_player_id(player2_name)
 
-    if not player1_id or not player2_id:
-        return jsonify({"error": "One or both players not found"}), 404
+    # if not player1_id or not player2_id:
+    #     return jsonify({"error": "One or both players not found"}), 404
 
     if season1 == 'Career':
         #averages1 = calculate_career_averages(fetch_career_stats(player1_id))
