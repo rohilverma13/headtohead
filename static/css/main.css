@@ -19,7 +19,7 @@ body {
     align-items: center;
     width: 100%; /* Ensure the container takes full width */
     position: relative;
-    top: 20vh; /* Position the title 20% from the top */
+    
 }
 
 .title {
