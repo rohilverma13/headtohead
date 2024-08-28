@@ -16,7 +16,8 @@ from utils.nba_utils import (
     reg_season_averages,
     normalize_values,
     career_averages, 
-    reg_seasons
+    reg_seasons,
+    get_team
 )
 import pandas as pd
 
@@ -172,12 +173,13 @@ def player_seasons():
 def team_info():
     data = request.get_json()
     player_name = data.get('player_name')
-
+    season = data.get('season')
     player_id = get_player_id(player_name)
     if not player_id:
         return jsonify({"error": "Player not found"}), 404
 
-    team_name = get_team_name(player_id).lower()
+    #team_name = get_team_name(player_id).lower()
+    team_name = get_team(player_name, season)
     gradient_url = url_for('static', filename=f'img/gradients/gradient_{team_name}.png')
     logo_url = url_for('static', filename=f'img/logos/{team_name}.png')
 

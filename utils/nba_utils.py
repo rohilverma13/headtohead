@@ -12,6 +12,7 @@ from PIL import Image
 import time
 
 regular_season = pd.read_csv('static/data/reg_season.csv')
+teams_data = pd.read_csv('static/data/teams_data.csv')
 
 max_values = {
     'MP': 42,
@@ -249,7 +250,14 @@ def process_image(image):
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return img_str
 
-
+def get_team(player_name, season):
+    if season == 'Career':
+        team = regular_season[(regular_season['Player'] == player_name)]['TEAM'].values[-1]
+    else:
+        team = regular_season[(regular_season['Player'] == player_name) & (regular_season['SEASON'] == season)]['TEAM'].values[0]
+        
+    nickname = teams_data.loc[teams_data['abbreviation'] == team, 'nickname'].values[0]
+    return nickname
 
 def get_team_name(player_id):
     # time.sleep(0.6)

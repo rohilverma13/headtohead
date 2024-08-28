@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         closeAllLists();
                         fetchSeasons(inp.value, inp.getAttribute('data-season-dropdown'));
                         fetchPlayerImage(inp.value, inp.getAttribute('data-image-element'));
-                        fetchTeamInfo(inp.value, inp.getAttribute('container-element'), inp.getAttribute('logo-element'));
+                        fetchTeamInfo(inp.value, 'Career', inp.getAttribute('container-element'), inp.getAttribute('logo-element'));
                         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
                     });
                     a.appendChild(b);
@@ -298,13 +298,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error fetching player image:', error));
     }
 
-    function fetchTeamInfo(playerName, containerId, logoImgID) {
+    function fetchTeamInfo(playerName, season, containerId, logoImgID) {
         fetch('/teaminfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ player_name: playerName }),
+            body: JSON.stringify({ player_name: playerName, season: season }),
         })
         .then(response => response.json())
         .then(data => {
@@ -399,14 +399,15 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchSeasons(p2, 'season2-dropdown');
     fetchPlayerImage(p1, 'player1-image');
     fetchPlayerImage(p2, 'player2-image');
-    // fetchTeamInfo(p1, 'player1-image-container', 'player1-logo');
-    // fetchTeamInfo(p2, 'player2-image-container', 'player2-logo');
+    fetchTeamInfo(p1, 'Career', 'player1-image-container', 'player1-logo');
+    fetchTeamInfo(p2, 'Career', 'player2-image-container', 'player2-logo');
     
 
     // Add event listeners to the season dropdowns
     document.getElementById('season1-dropdown').addEventListener('change', () => {
         console.log("SEASON 1 CHANGE");
         //fetchSeasons(document.getElementById('player1').value, document.getElementById('season1-dropdown'));
+        fetchTeamInfo(document.getElementById('player1').value, document.getElementById('season1-dropdown').value, 'player1-image-container', 'player1-logo');
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
 
