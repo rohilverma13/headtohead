@@ -180,8 +180,8 @@ def team_info():
 
     #team_name = get_team_name(player_id).lower()
     team_name = get_team(player_name, season)
-    gradient_url = url_for('static', filename=f'img/gradients/gradient_{team_name}.png')
-    logo_url = url_for('static', filename=f'img/logos/{team_name}.png')
+    gradient_url = url_for('static', filename=f'img/gradients/gradient_{team_name.lower()}.png')
+    logo_url = url_for('static', filename=f'img/logos/{team_name.lower()}.png')
 
     response = {
         "team_name": team_name,
