@@ -98,15 +98,23 @@ input[type=text] {
     width: 100%;
 }
 
+
+/* Ensure parent containers do not restrict overflow */
+.autocomplete-container, .search-container {
+    overflow: visible;
+}
+
+/* Adjust the autocomplete dropdown */
 .autocomplete-items {
     position: absolute;
     border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
+    z-index: 9999; /* Make sure it appears on top */
     top: 100%;
     left: 0;
     right: 0;
+    max-height: 8rem; /* Enough to fit four items without scrolling */
+    overflow-y: visible; /* Allow overflow */
+    background-color: #fff;
 }
 
 .autocomplete-items div {
@@ -114,6 +122,9 @@ input[type=text] {
     background-color: #fff;
     border-bottom: 1px solid #d4d4d4;
     color: #000000;
+    padding: 10px;
+    font-size: 16px;
+    height: 2rem; /* Adjust as needed for proper fit */
 }
 
 .autocomplete-items div:hover {
