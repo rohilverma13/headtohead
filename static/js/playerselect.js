@@ -397,8 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchPlayerInfo(p1, p2, 'Career', 'Career');
     fetchSeasons(p1, 'season1-dropdown');
     fetchSeasons(p2, 'season2-dropdown');
-    // fetchPlayerImage(p1, 'player1-image');
-    // fetchPlayerImage(p2, 'player2-image');
+    fetchPlayerImage(p1, 'player1-image');
+    fetchPlayerImage(p2, 'player2-image');
     // fetchTeamInfo(p1, 'player1-image-container', 'player1-logo');
     // fetchTeamInfo(p2, 'player2-image-container', 'player2-logo');
     

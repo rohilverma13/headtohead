@@ -249,6 +249,8 @@ def process_image(image):
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return img_str
 
+
+
 def get_team_name(player_id):
     # time.sleep(0.6)
     career_stats = playercareerstats.PlayerCareerStats(player_id=player_id)
