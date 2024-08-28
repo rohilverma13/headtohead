@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Comparison</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/playerselect.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="top-row">
+            <div class="search-container">
+                <div class="search-item" id="player1-card">
+                    <div class="autocomplete-container">
+                        <div class="autocomplete">
+                            <input id="player1" type="text" name="player1" placeholder="Player 1" data-season-dropdown="season1-dropdown" data-image-element="player1-image" container-element="player1-image-container" logo-element="player1-logo">
+                        </div>
+                        <div class="dropdown-color-container">
+                            <select id="season1-dropdown"></select>
+                            <input type="color" value="#13EC64" id="color1-picker" />
+                        </div>
+                    </div>
+                    <div id="player1-image-container" class="image-container">
+                        <img class="player-image" id="player1-image" src="" alt="" />
+                        <img class="logo" id="player1-logo" src="" alt="" />
+                    </div>
+                </div>
+                <div class="search-item">
+                    <div class="autocomplete-container">
+                        <div class="autocomplete">
+                            <input id="player2" type="text" name="player2" placeholder="Player 2" data-season-dropdown="season2-dropdown" data-image-element="player2-image" container-element="player2-image-container" logo-element="player2-logo">
+                        </div>
+                        <div class="dropdown-color-container">
+                            <select id="season2-dropdown"></select>
+                            <input type="color" value="#EC139B" id="color2-picker" />
+                        </div>
+                    </div>
+                    <div id="player2-image-container" class="image-container">
+                        <img class="player-image" id="player2-image" src="" alt="" />
+                        <img class="logo" id="player2-logo" src="" alt="" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="feature-selection-container">
+            <div class="info-icon">i</div>
+            <div class="feature-buttons-card">
+                <div id="feature-buttons" class="feature-buttons"></div>
+            </div>
+
+            
+        </div>
+        
+        <div class="chart-holder">
+            <div class="radarChart"></div>
+        </div>
+        
+        
+    </div>
+
+    <script id="playerNamesData" type="application/json">{{ players | tojson }}</script>
+    <script type="module" src="{{ url_for('static', filename='js/playerselect.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/radarChart.js')}}"></script>
+    
+</body>
+</html>

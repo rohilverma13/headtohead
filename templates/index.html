@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>head2head</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">head2head</h1>
+        <div class="buttons">
+            <a href="nba" class="btn">
+                <img src="{{ url_for('static', filename='img/icons/basketball.png') }}" alt="Basketball Icon">
+                NBA
+            </a>
+            <button class="btn">
+                <img src="{{ url_for('static', filename='img/icons/football.png') }}" alt="Football Icon">
+                NFL (coming soon)
+            </button>
+            <button class="btn">
+                <img src="{{ url_for('static', filename='img/icons/baseball.png') }}" alt="Baseball Icon">
+                MLB (coming soon)
+            </button>
+            <button class="btn">
+                <img src="{{ url_for('static', filename='img/icons/hockey.png') }}" alt="Hockey Icon">
+                NHL (coming soon)
+            </button>
+        </div>
+    </div>
+</body>
+</html>
