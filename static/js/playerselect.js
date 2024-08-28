@@ -405,13 +405,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add event listeners to the season dropdowns
     document.getElementById('season1-dropdown').addEventListener('change', () => {
-        console.log("SEASON 1 CHANGE");
+        // console.log("SEASON 1 CHANGE");
         //fetchSeasons(document.getElementById('player1').value, document.getElementById('season1-dropdown'));
         fetchTeamInfo(document.getElementById('player1').value, document.getElementById('season1-dropdown').value, 'player1-image-container', 'player1-logo');
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
 
     document.getElementById('season2-dropdown').addEventListener('change', () => {
+        fetchTeamInfo(document.getElementById('player2').value, document.getElementById('season2-dropdown').value, 'player2-image-container', 'player2-logo');
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
 
