@@ -3,35 +3,38 @@ body {
     padding: 0;
     font-family: 'Poppins', sans-serif;
     background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    text-align: center; /* Center text horizontally */
+    align-items: flex-start; /* Align items at the start */
+    overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
-/* Ensure the container for the entire content is centered */
 .container {
     text-align: center;
-     /* Adjust this value to position the container higher */
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%; /* Ensure the container takes full width */
-    margin-top: 10vh;
+    position: relative;
+    top: 20vh; /* Position the title 20% from the top */
 }
 
 .title {
     color: #801B4D;
     font-size: 4.5rem;
-    margin-bottom: 3rem; /* Reduce the space between the title and buttons */
+    margin-bottom: 10vh; /* Space between title and buttons */
 }
 
 .buttons {
     display: flex;
-    justify-content: space-around;
-    width: 70%; /* Adjust this value to control the width of the button container */
-    gap: 1rem; /* Reduce the space between buttons */
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+    margin-top: 10vh; /* Adjust the distance between title and buttons */
 }
 
 .btn {
@@ -49,14 +52,62 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem; /* Space between icon and text */
+    gap: 0.5rem;
+    flex: 1 1 45%; /* Allow buttons to take 45% of the container's width */
+    max-width: 200px; /* Max width of buttons to prevent overflow */
 }
 
 .btn img {
-    width: 1.5rem; /* Adjust the size of the icon */
+    width: 1.5rem;
     height: 1.5rem;
 }
 
 .btn:hover {
     background-color: #501030;
+}
+
+/* Media Query for screens less than 768px wide */
+@media (max-width: 768px) {
+    .title {
+        font-size: 3rem;
+        margin-bottom: 8vh;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.75rem;
+        max-width: 150px;
+    }
+
+    .btn img {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .buttons {
+        margin-top: 8vh;
+    }
+}
+
+/* Media Query for screens less than 480px wide */
+@media (max-width: 480px) {
+    .title {
+        font-size: 2.5rem;
+        margin-bottom: 6vh;
+    }
+
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.5rem;
+        max-width: 120px;
+    }
+
+    .btn img {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .buttons {
+        margin-top: 6vh;
+    }
 }
