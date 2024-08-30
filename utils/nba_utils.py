@@ -124,96 +124,96 @@ def get_player_id(player_name):
     else:
         return None
 
-def get_regular_season_stats(season, player_name):
-    player_dict = players.find_players_by_full_name(player_name)
-    if not player_dict:
-        return None
+# def get_regular_season_stats(season, player_name):
+#     player_dict = players.find_players_by_full_name(player_name)
+#     if not player_dict:
+#         return None
     
-    player_id = player_dict[0]['id']
-    player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
-    player_career_df = player_career.get_data_frames()[0]
-    season_stats_df = player_career_df[player_career_df['SEASON_ID'] == season]
+#     player_id = player_dict[0]['id']
+#     player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
+#     player_career_df = player_career.get_data_frames()[0]
+#     season_stats_df = player_career_df[player_career_df['SEASON_ID'] == season]
     
-    if season_stats_df.empty:
-        return None
+#     if season_stats_df.empty:
+#         return None
     
-    stats_columns = ['GP', 'MIN', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 
-                     'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+#     stats_columns = ['GP', 'MIN', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 
+#                      'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
     
-    per_game_stats_df = season_stats_df.copy()
-    for col in stats_columns:
-        if col != 'GP':
-            per_game_stats_df[col] = season_stats_df[col] / season_stats_df['GP']
+#     per_game_stats_df = season_stats_df.copy()
+#     for col in stats_columns:
+#         if col != 'GP':
+#             per_game_stats_df[col] = season_stats_df[col] / season_stats_df['GP']
     
-    season_stats = pd.Series({
-        'PTS': per_game_stats_df['PTS'].mean(),
-        'AST': per_game_stats_df['AST'].mean(),
-        'REB': per_game_stats_df['REB'].mean(),
-        'STOCKS': (per_game_stats_df['STL'].mean() + per_game_stats_df['BLK'].mean()),
-        'FT_PCT': per_game_stats_df['FT_PCT'].mean(),
-        'FG3M': per_game_stats_df['FG3M'].mean()
-    })
-    return season_stats
+#     season_stats = pd.Series({
+#         'PTS': per_game_stats_df['PTS'].mean(),
+#         'AST': per_game_stats_df['AST'].mean(),
+#         'REB': per_game_stats_df['REB'].mean(),
+#         'STOCKS': (per_game_stats_df['STL'].mean() + per_game_stats_df['BLK'].mean()),
+#         'FT_PCT': per_game_stats_df['FT_PCT'].mean(),
+#         'FG3M': per_game_stats_df['FG3M'].mean()
+#     })
+#     return season_stats
 
-def get_playoff_per_game_averages(player_name, season):
-    player_info = players.find_players_by_full_name(player_name)
-    if not player_info:
-        return None
+# def get_playoff_per_game_averages(player_name, season):
+#     player_info = players.find_players_by_full_name(player_name)
+#     if not player_info:
+#         return None
 
-    player_id = player_info[0]['id']
-    player_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
-    player_logs_df = player_logs.get_data_frames()[0]
+#     player_id = player_info[0]['id']
+#     player_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
+#     player_logs_df = player_logs.get_data_frames()[0]
 
-    if player_logs_df.empty:
-        return None
+#     if player_logs_df.empty:
+#         return None
 
-    per_game_averages = player_logs_df.mean(numeric_only=True)
-    per_game_averages['PLAYER_ID'] = player_id
-    per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
+#     per_game_averages = player_logs_df.mean(numeric_only=True)
+#     per_game_averages['PLAYER_ID'] = player_id
+#     per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
 
-    return pd.Series({
-        'PTS': per_game_averages['PTS'],
-        'AST': per_game_averages['AST'],
-        'REB': per_game_averages['REB'],
-        'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
-        'FT_PCT': per_game_averages['FT_PCT'],
-        'FG3M': per_game_averages['FG3M']
-    })
+#     return pd.Series({
+#         'PTS': per_game_averages['PTS'],
+#         'AST': per_game_averages['AST'],
+#         'REB': per_game_averages['REB'],
+#         'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
+#         'FT_PCT': per_game_averages['FT_PCT'],
+#         'FG3M': per_game_averages['FG3M']
+#     })
 
-def get_player_seasons(player_name):
-    player_id = get_player_id(player_name)
-    player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
-    player_career_df = player_career.get_data_frames()[0]
-    seasons = player_career_df['SEASON_ID'].unique().tolist()
-    return player_id, seasons
+# def get_player_seasons(player_name):
+#     player_id = get_player_id(player_name)
+#     player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
+#     player_career_df = player_career.get_data_frames()[0]
+#     seasons = player_career_df['SEASON_ID'].unique().tolist()
+#     return player_id, seasons
 
-def played_in_playoffs(player_id, season):
-    game_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
-    game_logs_df = game_logs.get_data_frames()[0]
-    return not game_logs_df.empty
+# def played_in_playoffs(player_id, season):
+#     game_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
+#     game_logs_df = game_logs.get_data_frames()[0]
+#     return not game_logs_df.empty
 
-def get_playoff_seasons(player_name):
-    player_id, seasons = get_player_seasons(player_name)
-    playoff_seasons = [season for season in seasons if played_in_playoffs(player_id, season)]
-    playoff_seasons = [season + ' Playoffs' for season in playoff_seasons]
-    return playoff_seasons, seasons
+# def get_playoff_seasons(player_name):
+#     player_id, seasons = get_player_seasons(player_name)
+#     playoff_seasons = [season for season in seasons if played_in_playoffs(player_id, season)]
+#     playoff_seasons = [season + ' Playoffs' for season in playoff_seasons]
+#     return playoff_seasons, seasons
 
-def fetch_career_stats(player_id):
-    player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
-    career_df = player_career.get_data_frames()[0]
-    return career_df
+# def fetch_career_stats(player_id):
+#     player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
+#     career_df = player_career.get_data_frames()[0]
+#     return career_df
 
-def calculate_career_averages(career_df):
-    total_games = career_df['GP'].sum()
-    career_averages = pd.Series({
-        'PTS': career_df['PTS'].sum() / total_games,
-        'AST': career_df['AST'].sum() / total_games,
-        'REB': career_df['REB'].sum() / total_games,
-        'STOCKS': (career_df['STL'].sum() + career_df['BLK'].sum()) / total_games,
-        'FT_PCT': career_df['FT_PCT'].mean(),
-        'FG3M': career_df['FG3M'].sum() / total_games
-    })
-    return career_averages
+# def calculate_career_averages(career_df):
+#     total_games = career_df['GP'].sum()
+#     career_averages = pd.Series({
+#         'PTS': career_df['PTS'].sum() / total_games,
+#         'AST': career_df['AST'].sum() / total_games,
+#         'REB': career_df['REB'].sum() / total_games,
+#         'STOCKS': (career_df['STL'].sum() + career_df['BLK'].sum()) / total_games,
+#         'FT_PCT': career_df['FT_PCT'].mean(),
+#         'FG3M': career_df['FG3M'].sum() / total_games
+#     })
+#     return career_averages
 
 def normalize_data(averages, max_values):
     normalized_stats = pd.Series({
@@ -255,7 +255,7 @@ def get_team(player_name, season):
         team = regular_season[(regular_season['Player'] == player_name)]['TEAM'].values[-1]
     else:
         team = regular_season[(regular_season['Player'] == player_name) & (regular_season['SEASON'] == season)]['TEAM'].values[0]
-        
+
     nickname = teams_data.loc[teams_data['abbreviation'] == team, 'nickname'].values[0]
     return nickname
 
