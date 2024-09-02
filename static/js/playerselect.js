@@ -24,12 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
             a.setAttribute("class", "autocomplete-items");
             this.parentNode.appendChild(a);
             let count = 0;
-            for (i = 0; i < arr.length && count < 5; i++) {
-                // Normalize both the input value and the array item to ensure matching works with apostrophes
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+    
+            for (i = 0; i < arr.length; i++) {
+                // Normalize both the input value and the array item to ensure matching works with both first and last names
+                let normalizedVal = val.toUpperCase();
+                let normalizedFullName = arr[i].toUpperCase();
+    
+                // Check if the input value is included anywhere in the full name (not just at the beginning of a part)
+                if (normalizedFullName.includes(normalizedVal)) {
                     b = document.createElement("DIV");
-                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                    b.innerHTML += arr[i].substr(val.length);
+                    let startIdx = normalizedFullName.indexOf(normalizedVal); // Find where the match starts
+    
+                    // Highlight the matching part
+                    b.innerHTML = arr[i].substr(0, startIdx) + "<strong>" + arr[i].substr(startIdx, val.length) + "</strong>" + arr[i].substr(startIdx + val.length);
+    
                     b.innerHTML += "<input type='hidden' value=\"" + arr[i] + "\">"; // Use double quotes to handle single quotes in the value
                     b.addEventListener("click", function(e) {
                         // Set the input field's value to the selected name
@@ -429,4 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         color2 = color2picker.value;
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
+
+    
 });

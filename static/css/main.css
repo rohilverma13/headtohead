@@ -8,7 +8,7 @@ body {
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items at the start */
+
     overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
@@ -19,13 +19,13 @@ body {
     align-items: center;
     width: 100%; /* Ensure the container takes full width */
     position: relative;
-    
 }
 
 .title {
     color: #801B4D;
     font-size: 4.5rem;
-    margin-bottom: 10vh; /* Space between title and buttons */
+    margin-bottom: 5vh; /* Adjust the space between title and buttons */
+    margin-top: 30vh;
 }
 
 .buttons {
@@ -34,7 +34,6 @@ body {
     justify-content: center;
     width: 100%;
     gap: 1rem;
-    margin-top: 10vh; /* Adjust the distance between title and buttons */
 }
 
 .btn {
@@ -66,11 +65,16 @@ body {
     background-color: #501030;
 }
 
+.disabled {
+    background-color: #555555; /* Grey out the button */
+    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+}
+
 /* Media Query for screens less than 768px wide */
 @media (max-width: 768px) {
     .title {
         font-size: 3rem;
-        margin-bottom: 8vh;
+        margin-bottom: 4vh;
     }
 
     .btn {
@@ -83,17 +87,13 @@ body {
         width: 1rem;
         height: 1rem;
     }
-
-    .buttons {
-        margin-top: 8vh;
-    }
 }
 
 /* Media Query for screens less than 480px wide */
 @media (max-width: 480px) {
     .title {
         font-size: 2.5rem;
-        margin-bottom: 6vh;
+        margin-bottom: 3vh;
     }
 
     .btn {
@@ -105,9 +105,5 @@ body {
     .btn img {
         width: 0.875rem;
         height: 0.875rem;
-    }
-
-    .buttons {
-        margin-top: 6vh;
     }
 }

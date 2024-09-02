@@ -11,19 +11,19 @@
     <div class="container index-container">
         <h1 class="title index-title">head2head</h1>
         <div class="buttons index-buttons">
-            <a href="nba" class="btn">
+            <a href="nba" class="btn"> <!-- NBA button remains functional -->
                 <img src="{{ url_for('static', filename='img/icons/basketball.png') }}" alt="Basketball Icon">
                 NBA
             </a>
-            <button class="btn">
+            <button class="btn disabled" disabled> <!-- Other buttons are greyed out and disabled -->
                 <img src="{{ url_for('static', filename='img/icons/football.png') }}" alt="Football Icon">
                 NFL
             </button>
-            <button class="btn">
+            <button class="btn disabled" disabled>
                 <img src="{{ url_for('static', filename='img/icons/baseball.png') }}" alt="Baseball Icon">
                 MLB
             </button>
-            <button class="btn">
+            <button class="btn disabled" disabled>
                 <img src="{{ url_for('static', filename='img/icons/hockey.png') }}" alt="Hockey Icon">
                 NHL
             </button>

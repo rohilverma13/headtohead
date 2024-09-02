@@ -113,7 +113,7 @@ input[type=text] {
     left: 0;
     right: 0;
     max-height: 8rem; /* Enough to fit four items without scrolling */
-    overflow-y: visible; /* Allow overflow */
+    overflow-y: auto; /* Allow overflow */
     background-color: #fff;
 }
 
