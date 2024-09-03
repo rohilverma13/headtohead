@@ -65,9 +65,15 @@ export function RadarChart(id, data, options) {
     .attr("width", cfg.w + cfg.margin.left + cfg.margin.right)
     .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
     .attr("class", "radar" + id);
-  // Append a g element        
+
+  // Append a g element with an initial scale of 80%    
   var g = svg.append("g")
-    .attr("transform", "translate(" + (cfg.w / 2 + cfg.margin.left) + "," + (cfg.h / 2 + cfg.margin.top) + ")");
+    .attr("transform", "translate(" + (cfg.w / 2 + cfg.margin.left) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(0.83)");
+
+  // Animate the scale to 100%
+  g.transition()
+    .duration(800) // Animation duration in milliseconds
+    .attr("transform", "translate(" + (cfg.w / 2 + cfg.margin.left) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(1)");
 
   /////////////////////////////////////////////////////////
   ////////// Glow filter for some extra pizzazz ///////////

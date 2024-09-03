@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
         // Initialize PTS, AST, and TRB as selected and move them to the front
-        ['PTS', 'AST', 'TRB'].forEach(feature => {
+        ['TRB', 'AST', 'PTS'].forEach(feature => {
             const button = container.querySelector(`.feature-button[data-feature="${feature}"]`);
             if (button) {
                 button.classList.add('selected');
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch default player info
     const p1 = 'Luka Doncic'
-    const p2 = 'LeBron James'
+    const p2 = 'Giannis Antetokounmpo'
     document.getElementById('player1').value = p1;
     document.getElementById('player2').value = p2;
     fetchPlayerInfo(p1, p2, 'Career', 'Career');
