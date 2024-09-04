@@ -424,6 +424,14 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
 
+    document.getElementById('clear-player1').addEventListener('click', function() {
+        document.getElementById('player1').value = '';
+    });
+    
+    document.getElementById('clear-player2').addEventListener('click', function() {
+        document.getElementById('player2').value = '';
+    });
+
     const color1picker = document.querySelector("#color1-picker");
 
     color1picker.addEventListener("change",(event)=>{

@@ -1,3 +1,7 @@
+:root {
+    --mainTheme: #501030;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -84,6 +88,21 @@ body {
     width: 60%;
 }
 
+.clear-icon {
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--mainTheme);
+    opacity: 0.75;
+}
+
+.clear-icon:hover {
+    opacity: 1;
+}
+
 input {
     border: 1px solid transparent;
     background-color: #f1f1f1;
@@ -113,7 +132,7 @@ input[type=text] {
     left: 0;
     right: 0;
     max-height: 8rem; /* Enough to fit four items without scrolling */
-    overflow-y: auto; /* Allow overflow */
+    overflow-y: auto; 
     background-color: #fff;
 }
 
@@ -123,7 +142,7 @@ input[type=text] {
     border-bottom: 1px solid #d4d4d4;
     color: #000000;
     padding: 10px;
-    font-size: 16px;
+    font-size: 0.9rem;
     height: 2rem; /* Adjust as needed for proper fit */
 }
 
@@ -151,7 +170,7 @@ select option {
 }
 
 .btn {
-    background-color: #801B4D;
+    background-color: var(--mainTheme);
     font-family: 'Poppins', sans-serif;
     border: none;
     padding: 1rem;
@@ -362,9 +381,11 @@ input[type="color"]::-moz-color-swatch {
         justify-content: space-between; /* Ensure dropdown and color picker are on the same row */
     }
 
-    select, 
+    select {
+        width: 70%
+    }
     input[type="color"] {
-        width: 48%; /* Each takes up about 50% of the row */
+        width: 28%; /* Each takes up about 50% of the row */
     }
 
     input[type="color"] {
@@ -409,12 +430,14 @@ input[type="color"]::-moz-color-swatch {
     }
 
     .autocomplete {
-        width: 60%
+        width: 50%
     }
 
-    select, 
+    select {
+        width: 60%
+    }
     input[type="color"] {
-        width: 48%; /* Each takes up about 50% of the row */
+        width: 38%; /* Each takes up about 50% of the row */
     }
 }
 
