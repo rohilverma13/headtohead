@@ -2,9 +2,7 @@
 
 import base64
 import requests
-from rembg import remove
 from io import BytesIO
-from flask import Flask, render_template, request, jsonify, url_for
 from nba_api.stats.static import players, teams
 from nba_api.stats.endpoints import playercareerstats, playergamelog
 import pandas as pd
