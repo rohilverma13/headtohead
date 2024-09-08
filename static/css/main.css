@@ -153,6 +153,10 @@ a {
         font-size: 15vw;
     }
 
+    .title-container{
+        margin-top: 20vh;
+    }
+
     .description {
         font-size: 5vw;
     }
@@ -160,6 +164,8 @@ a {
     .btn {
         font-size: 1rem;
         padding: 0.75rem;
+        width: 250px;
+        min-width: 150px; /* Optional: Set a minimum width if desired */
     }
 
     .btn img {
@@ -170,5 +176,13 @@ a {
     .logo {
         width: 30%;
         height: auto;
+    }
+
+    .buttons{
+        display: flex;
+        flex-direction: column;
+        width: auto; /* Let the width adjust to the content */
+        min-width: 150px; /* Optional: Set a minimum width if desired */
+    
     }
 }
