@@ -1,3 +1,11 @@
+:root {
+    --mainTheme: #ff999a;
+    --secondaryTheme: #ffffff;
+    --themeButtonHover: #5c1639;
+    --color1: #13EC64;
+    --color2: #EC139B;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -8,8 +16,15 @@ body {
     height: 100vh;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
+}
 
-    overflow-x: hidden; /* Prevent horizontal overflow */
+a {
+    text-decoration: none;
+}
+
+.description-special{
+
 }
 
 .container {
@@ -17,15 +32,47 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; /* Ensure the container takes full width */
+    width: 100%;
     position: relative;
 }
 
+.title-container {
+    display: flex;
+    flex-direction: column; /* Stack title and description */
+    align-items: center; /* Center the title-banner */
+    justify-content: center;
+    margin-top: 25vh;
+    width: 80%;
+    max-width: 1000px;
+}
+
+.title-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the entire title-banner */
+    flex-direction: row;
+    width: 100%; /* Ensure the banner takes full width for proper centering */
+}
+
 .title {
-    color: #801B4D;
-    font-size: 4.5rem;
-    margin-bottom: 5vh; /* Adjust the space between title and buttons */
-    margin-top: 30vh;
+    color: var(--mainTheme);
+    font-size: 7rem;
+    margin: 0;
+    text-align: left; /* Ensure title is left-aligned */
+}
+
+.logo {
+    width: 10rem;
+    height: auto;
+}
+
+.description {
+    font-size: 2.5rem;
+    color: var(--secondaryTheme);
+    text-align: center; /* Center align description below the title-banner */
+    margin-right: 2rem;
+    margin-top:0;
+    margin-bottom: 0;
 }
 
 .buttons {
@@ -34,10 +81,11 @@ body {
     justify-content: center;
     width: 100%;
     gap: 1rem;
+    margin-top: 10vh;
 }
 
 .btn {
-    background-color: #801B4D;
+    background-color: var(--mainTheme);
     font-family: 'Poppins', sans-serif;
     border: none;
     padding: 1rem;
@@ -52,58 +100,75 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    flex: 1 1 45%; /* Allow buttons to take 45% of the container's width */
-    max-width: 200px; /* Max width of buttons to prevent overflow */
+    /* Remove fixed width */
+    width: auto; /* Let the width adjust to the content */
+    min-width: 150px; /* Optional: Set a minimum width if desired */
 }
+
 
 .btn img {
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.btn:hover {
-    background-color: #501030;
+.btn-nba:hover {
+    background-color: #a75916;
 }
 
-.disabled {
-    background-color: #555555; /* Grey out the button */
-    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+.btn-nba {
+    background-color: #d5721b;
 }
 
-/* Media Query for screens less than 768px wide */
+.btn-nfl{
+    background-color: #56350e;
+    cursor: not-allowed;
+}
+
+.btn-nfl:hover{
+    background-color: #3d260a;
+}
+
+.btn-mlb{
+    background-color: #c61a1a;
+    cursor: not-allowed;
+}
+
+.btn-mlb:hover{
+    background-color: #9f1414;
+}
+
+.btn-nhl{
+    background-color: #000000;
+    cursor: not-allowed;
+}
+
+.btn-nhl{
+    background-color: #000000;
+    cursor: not-allowed;
+}
+
+
 @media (max-width: 768px) {
     .title {
-        font-size: 3rem;
-        margin-bottom: 4vh;
+        font-size: 15vw;
+    }
+
+    .description {
+        font-size: 5vw;
     }
 
     .btn {
         font-size: 1rem;
         padding: 0.75rem;
-        max-width: 150px;
     }
 
     .btn img {
         width: 1rem;
         height: 1rem;
     }
-}
 
-/* Media Query for screens less than 480px wide */
-@media (max-width: 480px) {
-    .title {
-        font-size: 2.5rem;
-        margin-bottom: 3vh;
-    }
-
-    .btn {
-        font-size: 0.875rem;
-        padding: 0.5rem;
-        max-width: 120px;
-    }
-
-    .btn img {
-        width: 0.875rem;
-        height: 0.875rem;
+    .logo {
+        width: 30%;
+        height: auto;
     }
 }

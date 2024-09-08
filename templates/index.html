@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>head2head</title>
+    <title>ballnoll</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     <!-- Google tag (gtag.js) -->
@@ -18,23 +18,35 @@
 </head>
 <body>
     <div class="container index-container">
-        <h1 class="title index-title">head2head</h1>
+        <div class="title-container">
+            <div class="title-banner">
+                <h1 class="title index-title">
+                    ballnoll
+                </h1>
+                <img src="{{ url_for('static', filename='img/ballnoll-logos/ballnoll-dark.png') }}" alt="Logo" class="logo"> <!-- Logo next to title -->
+            </div>
+            <p class="description">expand your <span class=description-special>ball</span> knowledge.</p> <!-- Description below the title -->
+        </div>
+        
         <div class="buttons index-buttons">
-            <a href="nba" class="btn"> <!-- NBA button remains functional -->
-                <img src="{{ url_for('static', filename='img/icons/basketball.png') }}" alt="Basketball Icon">
-                NBA
+            <a href="nba" >
+                <button class="btn btn-nba">
+                    <img src="{{ url_for('static', filename='img/icons/basketball.png') }}" alt="Basketball Icon">
+                    NBA
+                </button>
+                
             </a>
-            <button class="btn disabled" disabled> <!-- Other buttons are greyed out and disabled -->
+            <button class="btn btn-nfl" disabled>
                 <img src="{{ url_for('static', filename='img/icons/football.png') }}" alt="Football Icon">
-                NFL
+                NFL (coming soon)
             </button>
-            <button class="btn disabled" disabled>
+            <button class="btn btn-mlb" disabled>
                 <img src="{{ url_for('static', filename='img/icons/baseball.png') }}" alt="Baseball Icon">
-                MLB
+                MLB (coming soon)
             </button>
-            <button class="btn disabled" disabled>
+            <button class="btn btn-nhl" disabled>
                 <img src="{{ url_for('static', filename='img/icons/hockey.png') }}" alt="Hockey Icon">
-                NHL
+                NHL (coming soon)
             </button>
         </div>
     </div>
