@@ -23,7 +23,7 @@ a {
     flex-direction: column; /* Stack title and description */
     align-items: center; /* Center the title-banner */
     justify-content: center;
-    margin-top: 25vh;
+    margin-top: 20vh;
     margin-left: 2vw;
     width: 80%;
     max-width: 1000px;
@@ -138,6 +138,7 @@ a {
 
     .title-container{
         margin-top: 20vh;
+        margin-left: 8vw;
     }
 
     .description {
@@ -156,7 +157,7 @@ a {
         height: 1rem;
     }
 
-    .logo {
+    .main-logo {
         width: 30%;
         height: auto;
     }
