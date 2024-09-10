@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ballnoll</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8GT35N012"></script>
@@ -23,7 +24,7 @@
                 <h1 class="title index-title">
                     ballnoll
                 </h1>
-                <img src="{{ url_for('static', filename='img/ballnoll-logos/ballnoll-dark.png') }}" alt="Logo" class="logo"> <!-- Logo next to title -->
+                <img src="{{ url_for('static', filename='img/ballnoll-logos/ballnoll-dark.png') }}" alt="Logo" class="main-logo"> <!-- Logo next to title -->
             </div>
             <p class="description">elevate your <span class=description-special>ball</span> knowledge.</p> <!-- Description below the title -->
         </div>

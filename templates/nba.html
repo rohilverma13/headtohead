@@ -6,6 +6,7 @@
     <title>Player Comparison</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/playerselect.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8GT35N012"></script>
@@ -15,8 +16,19 @@
     gtag('js', new Date());
 
     gtag('config', 'G-L8GT35N012');
-</script>
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+    (function(){
+        emailjs.init({
+            publicKey: "S_BJsqm8CFUJmurYd",
+        });
+    })();
+    </script>
+
 </head>
 <body>
     <div class="container">
@@ -57,12 +69,15 @@
             </div>
             
         </div>
-        
+        <!-- <div class="info-icon">i</div> -->
         <div class="feature-selection-container">
-            <div class="info-icon">i</div>
+            
             <div class="feature-buttons-card">
                 <div id="feature-buttons" class="feature-buttons"></div>
             </div>
+            <a href="help" class="help-button">
+                ?
+            </a>
 
             
         </div>
@@ -71,9 +86,85 @@
             <div class="radarChart"></div>
         </div>
         
+        <div style="clear: both"></div>
+        <div class="footer">
+            <div class="logo-container">
+                <span class="footer-title">ballnoll</span>
+                <img src="{{ url_for('static', filename='img/ballnoll-logos/ballnoll-dark.png') }}" alt="Logo" class="footer-logo">
+            </div>
+            <div class="footer-content">
+                <div class="contact-us">
+                    <a href="mailto:rohilv13@gmail.com" class="contact-button">Contact Us</a>
+                </div>
+                <div class="feedback">
+                    <a href="#" id="open-feedback-form" class="feedback-button">Feedback</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hidden Feedback Form -->
+        <div id="feedback-form-container" class="feedback-form-container">
+            <div class="feedback-form">
+                <h2>Feedback</h2>
+                <label for="name">Name (optional):</label>
+                <input type="text" id="name" name="name">
+        
+                <label for="email">Email (optional):</label>
+                <input type="email" id="email" name="email">
+        
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+        
+                <button type="button" id="submit-feedback">Submit</button>
+                <button type="button" id="close-feedback-form">Close</button>
+            </div>
+        </div>
+        
         
     </div>
-
+    
+    <script>
+        document.getElementById('open-feedback-form').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the link default action
+            document.getElementById('feedback-form-container').style.display = 'flex';
+        });
+    
+        document.getElementById('close-feedback-form').addEventListener('click', function() {
+            document.getElementById('feedback-form-container').style.display = 'none';
+        });
+    
+        // Handle form submission with EmailJS
+        document.getElementById('submit-feedback').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            // Get form values
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var message = document.getElementById('message').value;
+    
+            // Validate that message is provided
+            if (!message.trim()) {
+                alert('Message is required.');
+                return;
+            }
+    
+            // Send form data to EmailJS
+            emailjs.send("service_vzwvgup", "template_f3pu2qg", {
+                name: name || 'Anonymous',
+                email: email || 'No Email Provided',
+                message: message
+            })
+            .then(function(response) {
+                alert('Feedback sent successfully!');
+                // Optionally clear the form and close it
+                document.getElementById('feedback-form-container').style.display = 'none';
+                document.getElementById('feedback-form').reset();
+            }, function(error) {
+                alert('Failed to send feedback. Please try again later.');
+            });
+        });
+    </script>
+    
     <script id="playerNamesData" type="application/json">{{ players | tojson }}</script>
     <script type="module" src="{{ url_for('static', filename='js/playerselect.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/radarChart.js')}}"></script>

@@ -15,3 +15,7 @@ def home():
 @main_bp.route('/nba')
 def nba():
     return render_template('nba.html', players=player_names)
+
+@main_bp.route('/help')
+def help():
+    return render_template('help.html')

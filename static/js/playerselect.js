@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         inp.value = this.getElementsByTagName("input")[0].value;
                         console.log(inp.value);
                         closeAllLists();
+                        document.getElementById(inp.getAttribute('data-season-dropdown')).value = 'Career';
                         fetchSeasons(inp.value, inp.getAttribute('data-season-dropdown'));
                         fetchPlayerImage(inp.value, inp.getAttribute('data-image-element'));
                         fetchTeamInfo(inp.value, 'Career', inp.getAttribute('container-element'), inp.getAttribute('logo-element'));
@@ -399,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch default player info
     const p1 = 'Luka Doncic'
-    const p2 = 'Giannis Antetokounmpo'
+    const p2 = 'Anthony Davis'
     document.getElementById('player1').value = p1;
     document.getElementById('player2').value = p2;
     fetchPlayerInfo(p1, p2, 'Career', 'Career');
