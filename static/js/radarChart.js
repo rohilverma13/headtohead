@@ -1,7 +1,7 @@
 export function RadarChart(id, data, options) {
   var cfg = {
     w: Math.min(window.innerWidth * .8, 600),                // Width of the circle
-    h: Math.min(window.innerHeight * .5, 500),                // Height of the circle
+    h: Math.min(window.innerHeight * .5, 450),                // Height of the circle
     levels: 3,                // How many levels or inner circles should there be drawn
     labelFactor: 1.15,     // How much farther than the radius of the outer circle should the labels be placed
     wrapWidth: 100,         // The number of pixels after which a label needs to be given a new line
