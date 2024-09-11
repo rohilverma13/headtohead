@@ -1,0 +1,44 @@
+/* Glossary Content Styling */
+
+.page-title {
+    font-size: 4rem;
+    margin-bottom: 0;
+    color: var(--mainTheme);
+}
+
+.glossary-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 entries per row on desktop */
+    gap: 1.5rem; /* Spacing between grid items */
+    width: 90%;
+    margin: 2rem 0;
+    max-width: 1200px;
+}
+
+.one-entry {
+    background-color: #1f1f1f;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.entry-title {
+    font-size: 1.25rem;
+    color: var(--mainTheme);
+}
+
+.entry-definition {
+    font-size: 1rem;
+    color: #ffffff;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 768px) {
+    .glossary-content {
+        grid-template-columns: repeat(2, 1fr); /* 2 entries per row on mobile */
+        gap: 1rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+    }
+}

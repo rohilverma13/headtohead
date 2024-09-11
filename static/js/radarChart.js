@@ -63,7 +63,7 @@ export function RadarChart(id, data, options) {
   // Initiate the radar chart SVG
   var svg = d3.select(id).append("svg")
     .attr("width", cfg.w + cfg.margin.left + cfg.margin.right)
-    .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
+    .attr("height", cfg.h + 80)
     .attr("class", "radar" + id);
 
   // Append a g element with an initial scale of 80%    
