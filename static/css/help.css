@@ -1,5 +1,14 @@
 /* Glossary Content Styling */
 
+.container {
+    text-align: center;
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .page-title {
     font-size: 4rem;
     margin-bottom: 0;
