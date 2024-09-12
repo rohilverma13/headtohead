@@ -275,9 +275,9 @@ select option {
     display: flex; /* Enable Flexbox */
     align-items: center;
     justify-content: center;
-    width: 80%; /* Ensure the container spans the full width */
+    width: 30%;
     margin: 0;
-    margin-left: 20vh;
+    margin-left: 15vh;
     /* border: solid 1px white; */
     text-align: center;
 }
@@ -291,6 +291,7 @@ select option {
 }
 
 #stat-table th, #stat-table td {
+    padding: 0.3rem;
     text-align: center;
 }
 
@@ -303,19 +304,25 @@ select option {
     background-color: #121212;
 }
 
+.table-image {
+    width: 100%;
+}
+
+.table-season {
+    margin: 0;
+}
+
 .chart-holder {
     display: flex;
     width: 95%;
     align-items: flex-start;
     justify-content: space-between;
     margin-top: 5vh;
+    margin-bottom: 10vh;
 }
 
 /* Styles for the stat table and radar chart */
-.stat-table-container {
-    display: inline-block;
-    width: 30%;
-}
+
 
 .radarChart {
     flex: 1;

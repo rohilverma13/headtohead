@@ -209,20 +209,67 @@ document.addEventListener('DOMContentLoaded', () => {
         statHeader.textContent = '';
         headerRow.appendChild(statHeader);
     
+        // Player 1 Header
         const player1Header = document.createElement('th');
-        player1Header.textContent = player1.name.slice(0, -1);
+    
+        // Create the image element for player 1
+        const player1Image = document.createElement('img');
+        player1Image.setAttribute("class", "table-image");
+        player1Image.setAttribute("id", "p1-table-image");
+    
+        // Add the image to the table
+        fetchPlayerImage(player1.name.slice(0, -1), "p1-table-image");
+        player1Header.appendChild(player1Image);
+    
+        // If the image is not found, fallback to player name
+        player1Image.onerror = function () {
+            player1Image.style.display = 'none'; // Hide the broken image
+            const player1Name = document.createElement('p');
+            player1Name.textContent = player1.name.slice(0, -1); // Fallback to player's name
+            player1Header.insertBefore(player1Name, player1Header.firstChild); // Insert the name above the season
+        };
+    
+        // Add season to table for player 1
+        const player1Season = document.createElement('p');
+        player1Season.setAttribute("class", "table-season");
+        player1Season.textContent = document.getElementById('season1-dropdown').value;
+        player1Header.appendChild(player1Season);
+    
         headerRow.appendChild(player1Header);
     
+        // Player 2 Header
         const player2Header = document.createElement('th');
-        player2Header.textContent = player2.name.slice(0, -1);
+    
+        // Create the image element for player 2
+        const player2Image = document.createElement('img');
+        player2Image.setAttribute("class", "table-image");
+        player2Image.setAttribute("id", "p2-table-image");
+    
+        // Add the image to the table
+        fetchPlayerImage(player2.name.slice(0, -1), "p2-table-image");
+        player2Header.appendChild(player2Image);
+    
+        // If the image is not found, fallback to player name
+        player2Image.onerror = function () {
+            player2Image.style.display = 'none'; // Hide the broken image
+            const player2Name = document.createElement('p');
+            player2Name.textContent = player2.name.slice(0, -1); // Fallback to player's name
+            player2Header.insertBefore(player2Name, player2Header.firstChild); // Insert the name above the season
+        };
+    
+        // Add season to table for player 2
+        const player2Season = document.createElement('p');
+        player2Season.setAttribute("class", "table-season");
+        player2Season.textContent = document.getElementById('season2-dropdown').value;
+        player2Header.appendChild(player2Season);
+    
         headerRow.appendChild(player2Header);
     
         statTable.appendChild(headerRow);
     
         // Create rows for each selected stat
-        //const stats = Array.from(document.querySelectorAll('.feature-button.selected')).map(button => button.getAttribute('data-feature'));
         const stats = floatColumns;
-
+    
         stats.forEach(stat => {
             const row = document.createElement('tr');
     
@@ -230,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             statNameCell.textContent = stat;
             statNameCell.style.color = "white";
             statNameCell.style.fontWeight = 'bold';
+            statNameCell.style.backgroundColor = "#464646";
             row.appendChild(statNameCell);
     
             const player1StatValue = player1.averages[stat] || 0;
@@ -437,7 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var radarChartOptions = {
             maxValue: 100,
-            roundStrokes: true,
             levels: 5,
             margin: { top: 60, right: 80, bottom: 80, left: 80 },
             color: d3.scale.ordinal().range([color1, color2]),

@@ -9,7 +9,7 @@ export function RadarChart(id, data, options) {
     dotRadius: 7,             // The size of the colored circles of each blog
     opacityCircles: 0.1,     // The opacity of the circles of each blob
     strokeWidth: 2,         // The width of the stroke around each blob
-    roundStrokes: false,    // If true the area and stroke will follow a round path (cardinal-closed)
+    roundStrokes: true,    // If true the area and stroke will follow a round path (cardinal-closed)
   };
 
   // Put all of the options into a variable called cfg
