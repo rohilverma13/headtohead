@@ -248,8 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 player2StatCell.style.backgroundColor = color2; // Light green for higher stat
             } else {
                 // If stats are equal, no highlighting
-                player1StatCell.style.backgroundColor = '#FFFFFF'; // White
-                player2StatCell.style.backgroundColor = '#FFFFFF'; // White
+                player1StatCell.style.backgroundColor = color1; // White
+                player2StatCell.style.backgroundColor = color2; // White
             }
     
             row.appendChild(player1StatCell);
