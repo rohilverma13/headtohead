@@ -1,7 +1,7 @@
 export function RadarChart(id, data, options) {
   var cfg = {
-    w: Math.min(window.innerWidth * .8, 600),                // Width of the circle
-    h: Math.min(window.innerHeight * .5, 450),                // Height of the circle
+    // w: Math.min(window.innerWidth * .5, 600),                // Width of the circle
+    // h: Math.min(window.innerHeight * .5, 450),                // Height of the circle
     levels: 3,                // How many levels or inner circles should there be drawn
     labelFactor: 1.15,     // How much farther than the radius of the outer circle should the labels be placed
     wrapWidth: 100,         // The number of pixels after which a label needs to be given a new line
@@ -44,7 +44,7 @@ export function RadarChart(id, data, options) {
   var maxValue = Math.max(cfg.maxValue, d3.max(dataArray, function (i) { return d3.max(i.map(function (o) { return o.value; })) }));
 
   var total = allAxis.length,                    // The number of different axes
-      radius = Math.min(cfg.w / 2, cfg.h / 2),     // Radius of the outermost circle
+      radius = Math.min(cfg.w * .38, cfg.h * .5),     // Radius of the outermost circle
       Format = d3.format('%'),                 // Percentage formatting
       angleSlice = Math.PI * 2 / total;        // The width in radians of each "slice"
 
@@ -62,18 +62,19 @@ export function RadarChart(id, data, options) {
 
   // Initiate the radar chart SVG
   var svg = d3.select(id).append("svg")
-    .attr("width", cfg.w + cfg.margin.left + cfg.margin.right)
+    .attr("width", cfg.w)
     .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
-    .attr("class", "radar" + id);
+    .attr("class", "radar" + id)
+    .style("align-self", "center");
 
   // Append a g element with an initial scale of 80%    
   var g = svg.append("g")
-    .attr("transform", "translate(" + (cfg.w / 2 + cfg.margin.left) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(0.83)");
+    .attr("transform", "translate(" + (cfg.w / 2) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(0.83)");
 
   // Animate the scale to 100%
   g.transition()
     .duration(800) // Animation duration in milliseconds
-    .attr("transform", "translate(" + (cfg.w / 2 + cfg.margin.left) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(1)");
+    .attr("transform", "translate(" + (cfg.w / 2) + "," + (cfg.h / 2 + cfg.margin.top) + ") scale(1)");
 
   /////////////////////////////////////////////////////////
   ////////// Glow filter for some extra pizzazz ///////////

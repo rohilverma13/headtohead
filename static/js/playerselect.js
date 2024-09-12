@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const minFeatures = 3;
     const maxFeatures = 8;
 
-    var color1 = "#13EC64"
+    var color1 = "#351E7A"
     var color2 =  "#EC139B"
 
     function autocomplete(inp, arr) {
@@ -199,7 +199,65 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     
+    function updateStatTable(player1, player2) {
+        const statTable = document.getElementById('stat-table');
+        statTable.innerHTML = ''; // Clear the previous content
     
+        // Create the header row
+        const headerRow = document.createElement('tr');
+        const statHeader = document.createElement('th');
+        statHeader.textContent = '';
+        headerRow.appendChild(statHeader);
+    
+        const player1Header = document.createElement('th');
+        player1Header.textContent = player1.name.slice(0, -1);
+        headerRow.appendChild(player1Header);
+    
+        const player2Header = document.createElement('th');
+        player2Header.textContent = player2.name.slice(0, -1);
+        headerRow.appendChild(player2Header);
+    
+        statTable.appendChild(headerRow);
+    
+        // Create rows for each selected stat
+        //const stats = Array.from(document.querySelectorAll('.feature-button.selected')).map(button => button.getAttribute('data-feature'));
+        const stats = floatColumns;
+
+        stats.forEach(stat => {
+            const row = document.createElement('tr');
+    
+            const statNameCell = document.createElement('td');
+            statNameCell.textContent = stat;
+            statNameCell.style.color = "white";
+            statNameCell.style.fontWeight = 'bold';
+            row.appendChild(statNameCell);
+    
+            const player1StatValue = player1.averages[stat] || 0;
+            const player2StatValue = player2.averages[stat] || 0;
+    
+            const player1StatCell = document.createElement('td');
+            const player2StatCell = document.createElement('td');
+    
+            player1StatCell.textContent = player1StatValue;
+            player2StatCell.textContent = player2StatValue;
+    
+            // Highlight the higher stat
+            if (player1StatValue > player2StatValue) {
+                player1StatCell.style.backgroundColor = color1; // Light green for higher stat
+            } else if (player2StatValue > player1StatValue) {
+                player2StatCell.style.backgroundColor = color2; // Light green for higher stat
+            } else {
+                // If stats are equal, no highlighting
+                player1StatCell.style.backgroundColor = '#FFFFFF'; // White
+                player2StatCell.style.backgroundColor = '#FFFFFF'; // White
+            }
+    
+            row.appendChild(player1StatCell);
+            row.appendChild(player2StatCell);
+    
+            statTable.appendChild(row);
+        });
+    }
     
 
     
@@ -275,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(data.error);
             } else {
                 displayRadarChart(data);
+                updateStatTable(data.player1, data.player2);
             }
         })
         .catch(error => console.error('Error fetching player data:', error));
@@ -385,12 +444,39 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         function drawChart() {
+            
+            d3.select(".radarChart").select("svg").remove();
+        
+            if (window.innerWidth < 768) {
+                
+                radarChartOptions.w = Math.min(window.innerWidth * 1, 600); 
+                radarChartOptions.h = Math.min(window.innerHeight * 0.55, 450); 
+                if (window.innerWidth < 430){
+                    radarChartOptions.margin = { top: 0, right: 80, bottom: 0, left: 80 };
+                }
+                else {
+                    radarChartOptions.margin = { top: 40, right: 80, bottom: 0, left: 80 };
+                }
+            } else {
+                radarChartOptions.w = Math.min(window.innerWidth * 0.45, 600);  
+                radarChartOptions.h = Math.min(window.innerHeight * 0.55, 450); 
+                radarChartOptions.margin = { top: 50, right: 0, bottom: 80, left: 0 };
+            }
+            
             RadarChart(".radarChart", chartData, radarChartOptions);
         }
-
+        
         
 
         drawChart();
+
+        function resize(){
+            if(window.innerWidth > 768){
+                drawChart()
+            }
+        }
+
+        window.addEventListener('resize', drawChart);
     }
 
     autocomplete(document.getElementById("player1"), playerNames);

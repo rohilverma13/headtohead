@@ -271,6 +271,57 @@ select option {
     opacity: 0.5;
 }
 
+.stat-table-container {
+    display: flex; /* Enable Flexbox */
+    align-items: center;
+    justify-content: center;
+    width: 80%; /* Ensure the container spans the full width */
+    margin: 0;
+    margin-left: 20vh;
+    /* border: solid 1px white; */
+    text-align: center;
+}
+
+#stat-table {
+    margin: 0; /* Center table within its container */
+    padding: 0;
+    border-collapse: collapse;
+    width: 85%; /* Adjust as necessary */
+    text-align: center;
+}
+
+#stat-table th, #stat-table td {
+    text-align: center;
+}
+
+#stat-table th {
+    background-color: #121212;
+    font-weight: bold;
+}
+
+#stat-table td {
+    background-color: #121212;
+}
+
+.chart-holder {
+    display: flex;
+    width: 95%;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 5vh;
+}
+
+/* Styles for the stat table and radar chart */
+.stat-table-container {
+    display: inline-block;
+    width: 30%;
+}
+
+.radarChart {
+    flex: 1;
+    margin-right: 15vw;
+}
+
 
 input[type="color"] {
     appearance: none;
@@ -300,7 +351,6 @@ input[type="color"]::-moz-color-swatch {
 
 
 
-/* Media Query for mobile devices */
 @media (max-width: 768px) {
     .autocomplete-container {
         display: flex;
@@ -320,13 +370,10 @@ input[type="color"]::-moz-color-swatch {
     }
 
     select {
-        width: 70%
+        width: 70%;
     }
     input[type="color"] {
         width: 28%; /* Each takes up about 50% of the row */
-    }
-
-    input[type="color"] {
         margin-left: 2%; /* Small spacing between dropdown and color picker */
     }
 
@@ -338,6 +385,35 @@ input[type="color"]::-moz-color-swatch {
     .logo {
         height: 18vw;
         width: 18vw;
+    }
+
+    /* Stack the chart-holder content vertically on mobile */
+    .chart-holder {
+        width: 100%;
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5vh;
+    }
+
+    #stats-table {
+        margin: auto;
+        align-self: center;
+    }
+
+    .stat-table-container {
+        order: 2; /* Ensure the stats table appears after the radar chart */
+        margin: 0;
+        width: 100%; /* Full width on mobile */
+        display: flex; /* Enable Flexbox */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .radarChart {
+        margin: 0;
+        order: 1; /* Ensure the radar chart appears before the stats table */
+        width: 100%; /* Full width on mobile */
     }
 }
 
