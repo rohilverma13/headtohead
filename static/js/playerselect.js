@@ -3,12 +3,12 @@ import { RadarChart } from './radarChart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const playerNames = JSON.parse(document.getElementById('playerNamesData').textContent);
-    const floatColumns = ['PTS', 'AST', 'TRB', 'FG', '3P', 'eFG%', 'FGA', 'FG%', '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'STL', 'BLK', 'MP'];
+    const floatColumns = ['PTS', 'AST', 'TRB', 'FG%', 'eFG%', '3P%', 'STL', 'BLK', 'FT%', 'FG', 'FGA', '3P', '3PA', 'FT', 'FTA',  'ORB', 'DRB', 'MP'];
 
     const minFeatures = 3;
     const maxFeatures = 8;
 
-    var color1 = "#351E7A"
+    var color1 = "#00b542"
     var color2 =  "#EC139B"
 
     function autocomplete(inp, arr) {
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
         // Initialize PTS, AST, and TRB as selected and move them to the front
-        ['TRB', 'AST', 'PTS'].forEach(feature => {
+        ['FG%', '3P%', 'TRB', 'AST', 'PTS'].forEach(feature => {
             const button = container.querySelector(`.feature-button[data-feature="${feature}"]`);
             if (button) {
                 button.classList.add('selected');
@@ -198,116 +198,249 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     
+    function makeTableRowsDraggable() {
+        const statTable = document.getElementById('stat-table');
     
+        let dragSrcRow = null;
+        let touchStartY = 0;
+        let placeholderRow = null;
+        let isDragging = false; // Flag to indicate if dragging is in progress
+    
+        // Handle mouse drag start
+        function handleDragStart(e) {
+            if (!isDragging) return; // Only drag if initiated from the stat name cell
+            dragSrcRow = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+            this.style.opacity = '0.4'; // Make the row semi-transparent
+        }
+    
+        // Handle mouse drag over
+        function handleDragOver(e) {
+            if (!isDragging) return;
+            if (e.preventDefault) {
+                e.preventDefault(); // Necessary to allow dropping
+            }
+            e.dataTransfer.dropEffect = 'move'; // Show move cursor
+            return false;
+        }
+    
+        // Handle mouse drop
+        function handleDrop(e) {
+            if (!isDragging) return;
+            if (e.stopPropagation) {
+                e.stopPropagation(); // Stops some browsers from redirecting
+            }
+    
+            // Swap the rows if a different row is being dropped
+            if (dragSrcRow !== this) {
+                dragSrcRow.innerHTML = this.innerHTML;
+                this.innerHTML = e.dataTransfer.getData('text/html');
+    
+                // Re-add event listeners to the swapped rows
+                addDnDHandlers(dragSrcRow);
+                addDnDHandlers(this);
+            }
+    
+            return false;
+        }
+    
+        // Handle mouse drag end
+        function handleDragEnd() {
+            if (!isDragging) return;
+            // Reset the opacity of all rows
+            const rows = statTable.querySelectorAll('tr');
+            rows.forEach(function (row) {
+                row.style.opacity = '1';
+            });
+            isDragging = false;
+        }
+    
+        // Handle touch start
+        function handleTouchStart(e) {
+            // Only start dragging if the touch starts on the first cell (stat name cell)
+            if (e.target.tagName !== 'TD' || e.target.cellIndex !== 0) {
+                return;
+            }
+    
+            isDragging = true; // Set dragging to true
+            dragSrcRow = this;
+            touchStartY = e.touches[0].clientY;
+    
+            // Create a placeholder row
+            placeholderRow = document.createElement('tr');
+            placeholderRow.style.height = `${dragSrcRow.clientHeight}px`;
+            placeholderRow.style.backgroundColor = '#ccc';
+            dragSrcRow.parentNode.insertBefore(placeholderRow, dragSrcRow);
+        }
+    
+        // Handle touch move
+        function handleTouchMove(e) {
+            if (!isDragging) return;
+            e.preventDefault(); // Prevent scrolling during dragging
+            const touchY = e.touches[0].clientY;
+    
+            // Determine the row under the current touch point
+            const rowUnderTouch = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+            if (rowUnderTouch && rowUnderTouch.tagName === 'TD') {
+                const targetRow = rowUnderTouch.parentNode;
+                if (targetRow !== dragSrcRow && targetRow.parentNode === statTable) {
+                    // Move the placeholder row
+                    const targetRect = targetRow.getBoundingClientRect();
+                    const targetRowCenterY = targetRect.top + targetRect.height / 2;
+                    if (touchY > targetRowCenterY) {
+                        targetRow.parentNode.insertBefore(placeholderRow, targetRow.nextSibling);
+                    } else {
+                        targetRow.parentNode.insertBefore(placeholderRow, targetRow);
+                    }
+                }
+            }
+        }
+    
+        // Handle touch end
+        function handleTouchEnd() {
+            if (!isDragging) return;
+            if (placeholderRow) {
+                // Insert the dragged row in place of the placeholder
+                placeholderRow.parentNode.replaceChild(dragSrcRow, placeholderRow);
+                placeholderRow = null;
+            }
+            isDragging = false;
+        }
+    
+        // Handle mouse down on the stat name cell to enable dragging on desktop
+        function handleMouseDown(e) {
+            // Only start dragging if the mouse is down on the first cell (stat name cell)
+            if (e.target.tagName === 'TD' && e.target.cellIndex === 0) {
+                isDragging = true;
+            }
+        }
+    
+        // Add drag and drop handlers
+        function addDnDHandlers(row) {
+            // Mouse events for desktop
+            row.addEventListener('mousedown', handleMouseDown, false);
+            row.addEventListener('dragstart', handleDragStart, false);
+            row.addEventListener('dragover', handleDragOver, false);
+            row.addEventListener('drop', handleDrop, false);
+            row.addEventListener('dragend', handleDragEnd, false);
+    
+            // Touch events for mobile
+            row.addEventListener('touchstart', handleTouchStart, false);
+            row.addEventListener('touchmove', handleTouchMove, false);
+            row.addEventListener('touchend', handleTouchEnd, false);
+        }
+    
+        // Apply drag and drop to each row in the table
+        const rows = statTable.querySelectorAll('tr');
+        rows.forEach(function (row) {
+            row.setAttribute('draggable', true); // Make rows draggable for desktop
+            addDnDHandlers(row);
+        });
+    }
+    
+    // Call this function after the table is populated or updated
     function updateStatTable(player1, player2) {
         const statTable = document.getElementById('stat-table');
         statTable.innerHTML = ''; // Clear the previous content
-    
+        
         // Create the header row
         const headerRow = document.createElement('tr');
         const statHeader = document.createElement('th');
         statHeader.textContent = '';
         headerRow.appendChild(statHeader);
-    
+        
         // Player 1 Header
         const player1Header = document.createElement('th');
-    
-        // Create the image element for player 1
         const player1Image = document.createElement('img');
         player1Image.setAttribute("class", "table-image");
         player1Image.setAttribute("id", "p1-table-image");
-    
-        // Add the image to the table
         fetchPlayerImage(player1.name.slice(0, -1), "p1-table-image");
         player1Header.appendChild(player1Image);
-    
-        // If the image is not found, fallback to player name
+        
         player1Image.onerror = function () {
-            player1Image.style.display = 'none'; // Hide the broken image
+            player1Image.style.display = 'none';
             const player1Name = document.createElement('p');
-            player1Name.textContent = player1.name.slice(0, -1); // Fallback to player's name
-            player1Header.insertBefore(player1Name, player1Header.firstChild); // Insert the name above the season
+            player1Name.textContent = player1.name.slice(0, -1);
+            player1Header.insertBefore(player1Name, player1Header.firstChild);
         };
-    
-        // Add season to table for player 1
+        
         const player1Season = document.createElement('p');
         player1Season.setAttribute("class", "table-season");
         player1Season.textContent = document.getElementById('season1-dropdown').value;
         player1Header.appendChild(player1Season);
-    
         headerRow.appendChild(player1Header);
-    
+        
         // Player 2 Header
         const player2Header = document.createElement('th');
-    
-        // Create the image element for player 2
         const player2Image = document.createElement('img');
         player2Image.setAttribute("class", "table-image");
         player2Image.setAttribute("id", "p2-table-image");
-    
-        // Add the image to the table
         fetchPlayerImage(player2.name.slice(0, -1), "p2-table-image");
         player2Header.appendChild(player2Image);
-    
-        // If the image is not found, fallback to player name
+        
         player2Image.onerror = function () {
-            player2Image.style.display = 'none'; // Hide the broken image
+            player2Image.style.display = 'none';
             const player2Name = document.createElement('p');
-            player2Name.textContent = player2.name.slice(0, -1); // Fallback to player's name
-            player2Header.insertBefore(player2Name, player2Header.firstChild); // Insert the name above the season
+            player2Name.textContent = player2.name.slice(0, -1);
+            player2Header.insertBefore(player2Name, player2Header.firstChild);
         };
-    
-        // Add season to table for player 2
+        
         const player2Season = document.createElement('p');
         player2Season.setAttribute("class", "table-season");
         player2Season.textContent = document.getElementById('season2-dropdown').value;
         player2Header.appendChild(player2Season);
-    
         headerRow.appendChild(player2Header);
-    
+        
         statTable.appendChild(headerRow);
-    
+        
         // Create rows for each selected stat
         const stats = floatColumns;
-    
+        
         stats.forEach(stat => {
             const row = document.createElement('tr');
-    
+        
             const statNameCell = document.createElement('td');
             statNameCell.textContent = stat;
             statNameCell.style.color = "white";
             statNameCell.style.fontWeight = 'bold';
             statNameCell.style.backgroundColor = "#464646";
             row.appendChild(statNameCell);
-    
+        
             const player1StatValue = player1.averages[stat] || 0;
             const player2StatValue = player2.averages[stat] || 0;
-    
+        
             const player1StatCell = document.createElement('td');
             const player2StatCell = document.createElement('td');
-    
+        
             player1StatCell.textContent = player1StatValue;
             player2StatCell.textContent = player2StatValue;
-    
-            // Highlight the higher stat
+        
             if (player1StatValue > player2StatValue) {
-                player1StatCell.style.backgroundColor = color1; // Light green for higher stat
+                player1StatCell.style.backgroundColor = color1;
             } else if (player2StatValue > player1StatValue) {
-                player2StatCell.style.backgroundColor = color2; // Light green for higher stat
+                player2StatCell.style.backgroundColor = color2;
             } else {
-                // If stats are equal, no highlighting
-                player1StatCell.style.backgroundColor = color1; // White
-                player2StatCell.style.backgroundColor = color2; // White
+                player1StatCell.style.backgroundColor = color1;
+                player2StatCell.style.backgroundColor = color2;
             }
-    
+        
             row.appendChild(player1StatCell);
             row.appendChild(player2StatCell);
-    
+        
             statTable.appendChild(row);
         });
+    
+        // Make the rows draggable
+        makeTableRowsDraggable();
     }
     
-
+    
+    
+    
+    
+    
+    
     
 
     function fetchSeasons(playerName, dropdownId) {
@@ -483,31 +616,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        var radarChartOptions = {
-            maxValue: 100,
-            levels: 5,
-            margin: { top: 60, right: 80, bottom: 80, left: 80 },
-            color: d3.scale.ordinal().range([color1, color2]),
-        };
+        
 
         function drawChart() {
+
+            var radarChartOptions = {
+                maxValue: 100,
+                levels: 5,
+                margin: { top: 60, right: 80, bottom: 80, left: 80 },
+                color: d3.scale.ordinal().range([color1, color2]),
+                showvalues: document.getElementById('show-values-checkbox').checked,
+                tooltipSize: "18px"
+            };
             
             d3.select(".radarChart").select("svg").remove();
         
             if (window.innerWidth < 768) {
                 
                 radarChartOptions.w = Math.min(window.innerWidth * 1, 600); 
-                radarChartOptions.h = Math.min(window.innerHeight * 0.55, 450); 
+                
                 if (window.innerWidth < 430){
                     radarChartOptions.margin = { top: 0, right: 80, bottom: 0, left: 80 };
+                    radarChartOptions.h = Math.min(10000, 400); 
                 }
                 else {
-                    radarChartOptions.margin = { top: 40, right: 80, bottom: 0, left: 80 };
+                    radarChartOptions.margin = { top: 0, right: 80, bottom: 0, left: 80 };
+                    radarChartOptions.h = Math.min(10000, 500); 
                 }
+
+                radarChartOptions.tooltipSize = "15px";
+
             } else {
-                radarChartOptions.w = Math.min(window.innerWidth * 0.45, 600);  
-                radarChartOptions.h = Math.min(window.innerHeight * 0.55, 450); 
+                radarChartOptions.w = Math.min(window.innerWidth * 0.55, 100000);  
+                radarChartOptions.h = Math.min(window.innerHeight * 0.65, 10000); 
                 radarChartOptions.margin = { top: 50, right: 0, bottom: 80, left: 0 };
+                
             }
             
             RadarChart(".radarChart", chartData, radarChartOptions);
@@ -518,12 +661,13 @@ document.addEventListener('DOMContentLoaded', () => {
         drawChart();
 
         function resize(){
-            if(window.innerWidth > 768){
+            if(window.innerWidth > 430){
                 drawChart()
             }
         }
 
-        window.addEventListener('resize', drawChart);
+        window.addEventListener('resize', resize);
+        document.getElementById('show-values-checkbox').addEventListener('change', drawChart);
     }
 
     autocomplete(document.getElementById("player1"), playerNames);
@@ -578,6 +722,97 @@ document.addEventListener('DOMContentLoaded', () => {
     color2picker.addEventListener("change",(event)=>{
         color2 = color2picker.value;
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
+    });
+
+    document.getElementById('download-chart').addEventListener('click', function () {
+        const svgElement = document.querySelector('.radarChart svg'); // Select the radar chart SVG
+        const svgData = new XMLSerializer().serializeToString(svgElement);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const img = new Image();
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+    
+        const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
+        const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
+    
+        // Set canvas size with increased resolution (2x or 3x for higher quality)
+        const scaleFactor = 3; // Adjust this factor for higher/lower resolution
+        canvas.width = width * scaleFactor;
+        canvas.height = height * scaleFactor;
+        ctx.scale(scaleFactor, scaleFactor); // Scale the canvas context to match the resolution
+    
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, width, height); // Draw the image at full size
+            URL.revokeObjectURL(url);
+        
+            // Create a link element and trigger a download
+            const link = document.createElement('a');
+            link.download = 'radar_chart.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+        
+        img.src = url;
+    });
+
+    document.querySelector('.share-container').addEventListener('click', function () {
+        // Show the share popup
+        document.getElementById('share-popup').classList.remove('hidden');
+        
+        const svgElement = document.querySelector('.radarChart svg'); // Select the radar chart SVG
+        const svgData = new XMLSerializer().serializeToString(svgElement);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+    
+        const img = new Image();
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+    
+        const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
+        const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
+    
+        // Set canvas size with higher resolution
+        const scaleFactor = 3; 
+        canvas.width = width * scaleFactor;
+        canvas.height = height * scaleFactor;
+        ctx.scale(scaleFactor, scaleFactor);
+    
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, width, height);
+            URL.revokeObjectURL(url);
+    
+            // Convert canvas to data URL (png format)
+            const pngData = canvas.toDataURL('image/png');
+    
+            // Twitter share URL
+            const twitterUrl = `https://twitter.com/intent/tweet?text=Check out this radar chart!&url=${encodeURIComponent(window.location.href)}`;
+    
+            // Instagram does not support direct image upload via URL, so we can prompt the user to download the image
+            const instagramUrl = pngData;
+    
+            // Facebook share URL
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+    
+            // Assign URLs to share buttons
+            document.getElementById('share-twitter').setAttribute('href', twitterUrl);
+            document.getElementById('share-facebook').setAttribute('href', facebookUrl);
+            document.getElementById('share-instagram').addEventListener('click', function () {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = pngData;
+                downloadLink.download = 'radar_chart.png';
+                downloadLink.click();
+            });
+        };
+    
+        img.src = url;
+    });
+    
+    
+    // Close the share popup
+    document.getElementById('close-share-popup').addEventListener('click', function () {
+        document.getElementById('share-popup').classList.add('hidden');
     });
 
     

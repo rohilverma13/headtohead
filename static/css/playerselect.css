@@ -277,7 +277,8 @@ select option {
     justify-content: center;
     width: 30%;
     margin: 0;
-    margin-left: 15vh;
+    margin-left: 8vw;
+    margin-right: 2rem;
     /* border: solid 1px white; */
     text-align: center;
 }
@@ -291,7 +292,7 @@ select option {
 }
 
 #stat-table th, #stat-table td {
-    padding: 0.3rem;
+    padding: 0.2rem;
     text-align: center;
 }
 
@@ -305,7 +306,7 @@ select option {
 }
 
 .table-image {
-    width: 100%;
+    width: 150px;
 }
 
 .table-season {
@@ -313,13 +314,49 @@ select option {
 }
 
 .chart-holder {
+    position: relative; /* Make the radar chart container the reference for absolute positioning */
     display: flex;
     width: 95%;
     align-items: flex-start;
     justify-content: space-between;
-    margin-top: 5vh;
+    margin-top: 2vw;
     margin-bottom: 10vh;
 }
+
+.chart-options {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-start;
+    align-items: flex-start; /* Align items to the left */
+    width: auto;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.values-box {
+    display: inline-flex; 
+    align-items: center; 
+    margin-bottom: 1rem; /* Add some space between the values checkbox and the share icon */
+    flex-grow: 1; /* Allow this element to take up remaining space */
+}
+
+.share-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem; /* Add some margin between the values box and the share icon */
+    align-self: flex-end; /* Move the share icon to the far right */
+}
+
+.share-image {
+    width: 30px; /* Size of the share icon */
+}
+
 
 /* Styles for the stat table and radar chart */
 
@@ -327,6 +364,7 @@ select option {
 .radarChart {
     flex: 1;
     margin-right: 15vw;
+    /* border: solid 1px white; */
 }
 
 
@@ -353,6 +391,51 @@ input[type="color"]::-webkit-color-swatch {
 input[type="color"]::-moz-color-swatch {
     border: none;
     border-radius: 3px;
+}
+
+
+/* Styles for the share pop-up */
+.share-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.share-buttons a {
+    display: block;
+    margin: 0.5rem 0;
+    text-decoration: none;
+    color: #333;
+    background-color: #f1f1f1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.share-popup.hidden {
+    display: none;
+}
+
+#close-share-popup {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #f44336;
+    color: #fff;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+#close-share-popup:hover {
+    background-color: #d32f2f;
 }
 
 
@@ -401,7 +484,10 @@ input[type="color"]::-moz-color-swatch {
         align-items: center;
         justify-content: center;
         margin-bottom: 5vh;
+        margin-top: 2.5vh;
     }
+
+
 
     #stats-table {
         margin: auto;
@@ -418,10 +504,18 @@ input[type="color"]::-moz-color-swatch {
     }
 
     .radarChart {
-        margin: 0;
-        order: 1; /* Ensure the radar chart appears before the stats table */
+        order: 1; /* Keep this to ensure radar chart appears first */
         width: 100%; /* Full width on mobile */
+        margin-right: 0; /* Remove extra margin */
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
     }
+
+    .table-image {
+        width: 30vw;
+    }
+
 }
 
 /* Media Query for desktop devices */

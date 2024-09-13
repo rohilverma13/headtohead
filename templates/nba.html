@@ -42,7 +42,7 @@
                         </div>
                         <div class="dropdown-color-container">
                             <select id="season1-dropdown"></select>
-                            <input type="color" value="#4C329A" id="color1-picker" />
+                            <input type="color" value="#00b542" id="color1-picker" />
                         </div>
                     </div>
                     <div id="player1-image-container" class="image-container">
@@ -82,14 +82,33 @@
             
         </div>
         
+        
         <div class="chart-holder">
+            <div class="chart-options">
+                <div class="values-box">
+                    <label>values</label>
+                    <input type="checkbox" id="show-values-checkbox">
+                    
+                </div>
+                <div class="share-container" style="visibility: hidden;">
+                    <img class="share-image" src="{{ url_for('static', filename='img/icons/share-icon-white.png') }}">
+                </div>
+                
+            </div>
+            
+            
             <div class="stat-table-container">
                 <table id="stat-table">
                     <!-- The table will be populated dynamically -->
                 </table>
             </div>
-            <div class="radarChart"></div>
+            <div class="radarChart">
+            
+            </div>
         </div>
+
+        <button id="download-chart" class="download-button" style="visibility: hidden;">Download Chart as PNG </button>
+
         
         <div style="clear: both"></div>
         <div class="footer">
@@ -123,6 +142,17 @@
                 <button type="button" id="submit-feedback">Submit</button>
                 <button type="button" id="close-feedback-form">Close</button>
             </div>
+        </div>
+
+        <!-- Share popup -->
+        <div id="share-popup" class="share-popup hidden">
+            <h3>Share to</h3>
+            <div class="share-buttons">
+                <a href="#" id="share-twitter" target="_blank">Share to Twitter</a>
+                <a href="#" id="share-instagram" target="_blank">Share to Instagram</a>
+                <a href="#" id="share-facebook" target="_blank">Share to Facebook</a>
+            </div>
+            <button id="close-share-popup">Close</button>
         </div>
         
         
