@@ -3,16 +3,15 @@
 from flask import Blueprint, request, jsonify, url_for
 from utils.nba_utils import (
     get_player_id, 
+    get_playoff_seasons,
+    get_playoff_averages,
+    playoff_career_averages,
     get_regular_season_stats, 
-    get_playoff_per_game_averages, 
     fetch_career_stats, 
     calculate_career_averages, 
     normalize_data, 
     fetch_player_image, 
     process_image, 
-    get_playoff_seasons,
-    get_team_name,
-    calculate_combined_playoff_averages,
     reg_season_averages,
     normalize_values,
     career_averages, 
@@ -50,9 +49,9 @@ def player_info():
         #averages1 = calculate_career_averages(fetch_career_stats(player1_id))
         averages1 = career_averages(player1_name)
     elif season1 == 'Playoff Career':
-        averages1 = calculate_combined_playoff_averages(player1_name)
+        averages1 = playoff_career_averages(player1_name)
     elif 'Playoffs' in season1:
-        averages1 = get_playoff_per_game_averages(player1_name, season1.replace(' Playoffs', ''))
+        averages1 = get_playoff_averages(player1_name, season1.replace(' Playoffs', ''))
     else:
         # averages1 = get_regular_season_stats(season1, player1_name)
         averages1 = reg_season_averages(season1, player1_name)
@@ -61,9 +60,9 @@ def player_info():
         #averages2 = calculate_career_averages(fetch_career_stats(player2_id))
         averages2 = career_averages(player2_name)
     elif season2 == 'Playoff Career':
-        averages2 = calculate_combined_playoff_averages(player2_name)
+        averages2 = playoff_career_averages(player2_name)
     elif 'Playoffs' in season2:
-        averages2 = get_playoff_per_game_averages(player2_name, season2.replace(' Playoffs', ''))
+        averages2 = get_playoff_averages(player2_name, season2.replace(' Playoffs', ''))
     else:
         # averages2 = get_regular_season_stats(season2, player2_name)
         averages2 = reg_season_averages(season2, player2_name)
@@ -73,6 +72,8 @@ def player_info():
 
     # normalized_stats1 = normalize_data(averages1, max_values)
     # normalized_stats2 = normalize_data(averages2, max_values)
+
+
 
     normalized_stats1 = normalize_values(averages1)
     normalized_stats2 = normalize_values(averages2)
@@ -158,8 +159,7 @@ def player_seasons():
     # playoff_seasons, all_seasons = get_playoff_seasons(player_name)
     all_seasons = reg_seasons(player_name=player_name)
 
-    playoff_seasons = []
-    
+    playoff_seasons = get_playoff_seasons(player_name=player_name)
     response = {
         "playoff_seasons": playoff_seasons,
         "regular_seasons": all_seasons

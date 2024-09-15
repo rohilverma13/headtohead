@@ -10,6 +10,7 @@ from PIL import Image
 import time
 
 regular_season = pd.read_csv('static/data/reg_season.csv')
+playoffs = pd.read_csv('static/data/playoffs_data.csv')
 teams_data = pd.read_csv('static/data/teams_data.csv')
 
 max_values = {
@@ -37,6 +38,79 @@ max_values = {
     'PF': 5,
     'PTS': 35
 }
+
+#Method to get list of playoff seasons:
+def get_playoff_seasons(player_name):
+    player_data = playoffs[(playoffs['Player'] == player_name)]
+    result =  player_data['SEASON'].tolist()
+    return sorted(result)
+
+#Method to get playoff averages 
+def get_playoff_averages(player_name, season):
+    season = int(season)
+    playoffs_copy = playoffs.copy()
+    
+    # Normalize player names to lowercase and strip any leading/trailing whitespace
+    playoffs_copy['Player'] = playoffs_copy['Player'].str.lower().str.strip()
+    player_name = player_name.lower().strip()
+    
+    # Ensure season is the correct type (convert to string if needed)
+    if playoffs_copy['SEASON'].dtype != type(season):
+        # Convert both the column and the input to string for comparison
+        playoffs_copy['SEASON'] = playoffs_copy['SEASON'].astype(str)
+        season = str(season)
+    
+    # Filter the DataFrame for the specified season and player
+    player_data = playoffs_copy[(playoffs_copy['SEASON'] == season) & (playoffs_copy['Player'] == player_name)].copy()
+    
+    if player_data.empty:
+        return f"No data found for {player_name} in season {season}"
+    
+    # List of columns to be converted to floats
+    float_columns = ['MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+    
+    # Ensure the specified columns exist in the DataFrame
+    float_columns = [col for col in float_columns if col in player_data.columns]
+    
+    # Convert specified columns to floats, handling errors
+    for col in float_columns:
+        # Use pd.to_numeric to safely convert and handle errors
+        player_data[col] = pd.to_numeric(player_data[col], errors='coerce')
+    
+    # Return the dictionary of the converted columns
+    return player_data[float_columns].to_dict(orient='records')[0]
+
+def playoff_career_averages(player_name):
+    # Ensure player names are in lowercase for comparison
+    data = playoffs.copy()  # Create a copy of the DataFrame to avoid modifying the original
+
+    data['Player'] = data['Player'].str.lower()
+    player_name = player_name.lower()
+    
+    # Filter the DataFrame for the specified player
+    player_data = data.loc[data['Player'] == player_name].copy()  # Create a copy of the slice to avoid SettingWithCopyWarning
+    
+    if player_data.empty:
+        return f"No data found for player {player_name}"
+    
+    # List of columns to be converted to floats
+    float_columns = ['MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA', '2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+    
+    # Convert specified columns to numeric, forcing errors to NaN
+    player_data[float_columns + ['G']] = player_data[float_columns + ['G']].apply(pd.to_numeric, errors='coerce')
+    
+    # Calculate career totals by multiplying each stat by the games played, skipping NaNs
+    career_totals = {}
+    for col in float_columns:
+        career_totals[col] = (player_data[col] * player_data['G']).sum(skipna=True)
+    
+    # Calculate total games played
+    total_games = player_data['G'].sum(skipna=True)
+    
+    # Calculate career averages
+    career_averages = {col: career_totals[col] / total_games for col in float_columns}
+    
+    return career_averages
 
 #Method to get list of seasons played:
 def reg_seasons(player_name):
@@ -153,30 +227,30 @@ def get_regular_season_stats(season, player_name):
     })
     return season_stats
 
-def get_playoff_per_game_averages(player_name, season):
-    player_info = players.find_players_by_full_name(player_name)
-    if not player_info:
-        return None
+# def get_playoff_per_game_averages(player_name, season):
+#     player_info = players.find_players_by_full_name(player_name)
+#     if not player_info:
+#         return None
 
-    player_id = player_info[0]['id']
-    player_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
-    player_logs_df = player_logs.get_data_frames()[0]
+#     player_id = player_info[0]['id']
+#     player_logs = playergamelog.PlayerGameLog(player_id=player_id, season=season, season_type_all_star='Playoffs')
+#     player_logs_df = player_logs.get_data_frames()[0]
 
-    if player_logs_df.empty:
-        return None
+#     if player_logs_df.empty:
+#         return None
 
-    per_game_averages = player_logs_df.mean(numeric_only=True)
-    per_game_averages['PLAYER_ID'] = player_id
-    per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
+#     per_game_averages = player_logs_df.mean(numeric_only=True)
+#     per_game_averages['PLAYER_ID'] = player_id
+#     per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
 
-    return pd.Series({
-        'PTS': per_game_averages['PTS'],
-        'AST': per_game_averages['AST'],
-        'REB': per_game_averages['REB'],
-        'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
-        'FT_PCT': per_game_averages['FT_PCT'],
-        'FG3M': per_game_averages['FG3M']
-    })
+#     return pd.Series({
+#         'PTS': per_game_averages['PTS'],
+#         'AST': per_game_averages['AST'],
+#         'REB': per_game_averages['REB'],
+#         'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
+#         'FT_PCT': per_game_averages['FT_PCT'],
+#         'FG3M': per_game_averages['FG3M']
+#     })
 
 def get_player_seasons(player_name):
     player_id = get_player_id(player_name)
@@ -190,11 +264,11 @@ def played_in_playoffs(player_id, season):
     game_logs_df = game_logs.get_data_frames()[0]
     return not game_logs_df.empty
 
-def get_playoff_seasons(player_name):
-    player_id, seasons = get_player_seasons(player_name)
-    playoff_seasons = [season for season in seasons if played_in_playoffs(player_id, season)]
-    playoff_seasons = [season + ' Playoffs' for season in playoff_seasons]
-    return playoff_seasons, seasons
+# def get_playoff_seasons(player_name):
+#     player_id, seasons = get_player_seasons(player_name)
+#     playoff_seasons = [season for season in seasons if played_in_playoffs(player_id, season)]
+#     playoff_seasons = [season + ' Playoffs' for season in playoff_seasons]
+#     return playoff_seasons, seasons
 
 def fetch_career_stats(player_id):
     player_career = playercareerstats.PlayerCareerStats(player_id=player_id)
@@ -249,8 +323,14 @@ def process_image(image):
     return img_str
 
 def get_team(player_name, season):
+    # playoffs = pd.read_csv('static/data/playoffs.csv')
     if season == 'Career':
         team = regular_season[(regular_season['Player'] == player_name)]['TEAM'].values[-1]
+    elif season == 'Playoff Career':
+        team = playoffs[(playoffs['Player'] == player_name)]['TEAM'].values[-1]
+    elif 'Playoffs' in season:
+        season = season.replace(' Playoffs', '')
+        team = playoffs[(playoffs['Player'] == player_name) & (playoffs['SEASON'] == int(season))]['TEAM'].values[0]
     else:
         team = regular_season[(regular_season['Player'] == player_name) & (regular_season['SEASON'] == season)]['TEAM'].values[0]
         
@@ -274,32 +354,32 @@ def get_team_name(player_id):
     
     return team_nickname
 
-def calculate_combined_playoff_averages(player_name):
-    player_info = players.find_players_by_full_name(player_name)
-    if not player_info:
-        return None
+# def calculate_combined_playoff_averages(player_name):
+#     player_info = players.find_players_by_full_name(player_name)
+#     if not player_info:
+#         return None
 
-    player_id = player_info[0]['id']
+#     player_id = player_info[0]['id']
 
-    pseasons = get_playoff_seasons('Lebron James')[0]
+#     pseasons = get_playoff_seasons('Lebron James')[0]
 
-    full_playoffs = []
-    for pseason in pseasons:
-        season = pseason.replace(' Playoffs', '')
-        full_playoffs.append(get_playoff_per_game_averages('Lebron James', season))
+#     full_playoffs = []
+#     for pseason in pseasons:
+#         season = pseason.replace(' Playoffs', '')
+#         full_playoffs.append(get_playoff_per_game_averages('Lebron James', season))
 
 
-    df = pd.concat(full_playoffs)
-    per_game_averages = df.mean(numeric_only=True)
-    per_game_averages['PLAYER_ID'] = player_id
-    per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
+#     df = pd.concat(full_playoffs)
+#     per_game_averages = df.mean(numeric_only=True)
+#     per_game_averages['PLAYER_ID'] = player_id
+#     per_game_averages['PLAYER_NAME'] = player_info[0]['full_name']
 
-    final = pd.Series({
-        'PTS': per_game_averages['PTS'],
-        'AST': per_game_averages['AST'],
-        'REB': per_game_averages['REB'],
-        'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
-        'FT_PCT': per_game_averages['FT_PCT'],
-        'FG3M': per_game_averages['FG3M']
-    })
-    return final
+#     final = pd.Series({
+#         'PTS': per_game_averages['PTS'],
+#         'AST': per_game_averages['AST'],
+#         'REB': per_game_averages['REB'],
+#         'STOCKS': (per_game_averages['STL'] + per_game_averages['BLK']),
+#         'FT_PCT': per_game_averages['FT_PCT'],
+#         'FG3M': per_game_averages['FG3M']
+#     })
+#     return final

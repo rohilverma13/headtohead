@@ -489,8 +489,8 @@ document.addEventListener('DOMContentLoaded', () => {
         playoffSeasonsGroup.label = "Playoff Seasons";
         data.playoff_seasons.forEach(season => {
             const option = document.createElement('option');
-            option.value = season;
-            option.text = season;
+            option.value = season + ' Playoffs';
+            option.text = season + ' Playoffs';
             playoffSeasonsGroup.appendChild(option);
         });
 
