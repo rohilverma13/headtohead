@@ -314,7 +314,7 @@ def fetch_player_image(player_id):
         return Image.open(BytesIO(response.content))
     else:
         return None
-
+    
 def process_image(image):
     output_image = image
     buffered = BytesIO()
