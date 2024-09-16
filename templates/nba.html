@@ -8,8 +8,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/playerselect.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8GT35N012"></script>
+    
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -90,8 +94,8 @@
                     <input type="checkbox" id="show-values-checkbox">
                     
                 </div>
-                <div class="share-container" style="visibility: hidden;">
-                    <img class="share-image" src="{{ url_for('static', filename='img/icons/share-icon-white.png') }}">
+                <div id="download-button" class="download-container">
+                    <img class="download-image" src="{{ url_for('static', filename='img/icons/download.png') }}">
                 </div>
                 
             </div>

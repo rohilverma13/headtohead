@@ -348,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const headerRow = document.createElement('tr');
         const statHeader = document.createElement('th');
         statHeader.textContent = '';
+        statHeader.style.borderRight = '0px';
         headerRow.appendChild(statHeader);
         
         // Player 1 Header
@@ -724,18 +725,66 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchPlayerInfo(document.getElementById('player1').value, document.getElementById('player2').value, document.getElementById('season1-dropdown').value, document.getElementById('season2-dropdown').value);
     });
 
-    document.getElementById('download-chart').addEventListener('click', function () {
-        const svgElement = document.querySelector('.radarChart svg'); // Select the radar chart SVG
+    document.getElementById('download-button').addEventListener('click', function () {
+        var Root = document.documentElement;
+        const original = document.querySelector('.radarChart svg'); // Select the radar chart SVG
+        const svgElement = original.cloneNode(true);
+        svgElement.setAttribute("id", "clone-graph");
+    
+        Root.appendChild(svgElement);
+    
+        // Create a dark background rectangle and append it to the cloned SVG
+        const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
+        const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
+        const backgroundRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        backgroundRect.setAttribute("width", width);
+        backgroundRect.setAttribute("height", height);
+        backgroundRect.setAttribute("fill", "#333"); // Dark background color (you can adjust this as needed)
+        svgElement.insertBefore(backgroundRect, svgElement.firstChild); // Add the rectangle as the first child of the SVG
+    
+        // Add player images
+        const player1Image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        player1Image.setAttribute("x", 20); // Position X
+        player1Image.setAttribute("y", 10); // Position Y
+        player1Image.setAttribute("width", 80); // Width of the image
+        player1Image.setAttribute("height", 80); // Height of the image
+        player1Image.setAttribute("href", document.getElementById('player1-image').src); // Use the source of the current image
+    
+        const player2Image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        player2Image.setAttribute("x", 20); // Position X
+        player2Image.setAttribute("y", 80); // Position Y
+        player2Image.setAttribute("width", 80); // Width of the image
+        player2Image.setAttribute("height", 80); // Height of the image
+        player2Image.setAttribute("href", document.getElementById('player2-image').src); // Use the source of the current image
+    
+        svgElement.appendChild(player1Image);
+        svgElement.appendChild(player2Image);
+    
+        const player1Box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        player1Box.setAttribute("x", 110); // Position X (right of the image)
+        player1Box.setAttribute("y", 40); // Position Y (centered with the image)
+        player1Box.setAttribute("width", 20); // Width of the box
+        player1Box.setAttribute("height", 20); // Height of the box
+        player1Box.setAttribute("fill", color1); // Fill with player's respective color
+    
+        const player2Box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        player2Box.setAttribute("x", 110); // Position X (right of the image)
+        player2Box.setAttribute("y", 120); // Position Y (centered with the image)
+        player2Box.setAttribute("width", 20); // Width of the box
+        player2Box.setAttribute("height", 20); // Height of the box
+        player2Box.setAttribute("fill", color2); // Fill with player's respective color
+    
+        svgElement.appendChild(player1Box);
+        svgElement.appendChild(player2Box);
+    
+        // Convert the SVG to PNG and download
         const svgData = new XMLSerializer().serializeToString(svgElement);
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        
+    
         const img = new Image();
         const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(svgBlob);
-    
-        const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
-        const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
     
         // Set canvas size with increased resolution (2x or 3x for higher quality)
         const scaleFactor = 3; // Adjust this factor for higher/lower resolution
@@ -743,71 +792,90 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = height * scaleFactor;
         ctx.scale(scaleFactor, scaleFactor); // Scale the canvas context to match the resolution
     
+        // Extract the last names of player1 and player2
+        const player1Name = document.getElementById('player1').value;
+        const player2Name = document.getElementById('player2').value;
+        const player1LastName = player1Name.split(' ').slice(-1)[0]; // Get the last word in the name (last name)
+        const player2LastName = player2Name.split(' ').slice(-1)[0]; // Get the last word in the name (last name)
+    
         img.onload = function () {
             ctx.drawImage(img, 0, 0, width, height); // Draw the image at full size
             URL.revokeObjectURL(url);
-        
-            // Create a link element and trigger a download
+    
+            // Create a link element and trigger a download for the SVG graph
             const link = document.createElement('a');
-            link.download = 'radar_chart.png';
+            link.download = `${player1LastName}_${player2LastName}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-        };
-        
-        img.src = url;
-    });
-
-    document.querySelector('.share-container').addEventListener('click', function () {
-        // Show the share popup
-        document.getElementById('share-popup').classList.remove('hidden');
-        
-        const svgElement = document.querySelector('.radarChart svg'); // Select the radar chart SVG
-        const svgData = new XMLSerializer().serializeToString(svgElement);
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
     
-        const img = new Image();
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
-    
-        const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
-        const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
-    
-        // Set canvas size with higher resolution
-        const scaleFactor = 3; 
-        canvas.width = width * scaleFactor;
-        canvas.height = height * scaleFactor;
-        ctx.scale(scaleFactor, scaleFactor);
-    
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0, width, height);
-            URL.revokeObjectURL(url);
-    
-            // Convert canvas to data URL (png format)
-            const pngData = canvas.toDataURL('image/png');
-    
-            // Twitter share URL
-            const twitterUrl = `https://twitter.com/intent/tweet?text=Check out this radar chart!&url=${encodeURIComponent(window.location.href)}`;
-    
-            // Instagram does not support direct image upload via URL, so we can prompt the user to download the image
-            const instagramUrl = pngData;
-    
-            // Facebook share URL
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
-    
-            // Assign URLs to share buttons
-            document.getElementById('share-twitter').setAttribute('href', twitterUrl);
-            document.getElementById('share-facebook').setAttribute('href', facebookUrl);
-            document.getElementById('share-instagram').addEventListener('click', function () {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = pngData;
-                downloadLink.download = 'radar_chart.png';
-                downloadLink.click();
+            // Download the table as PNG using html2canvas
+            const statTable = document.getElementById('stat-table');
+            html2canvas(statTable).then(function (tableCanvas) {
+                const tableLink = document.createElement('a');
+                tableLink.download = `${player1LastName}_${player2LastName}_table.png`;
+                tableLink.href = tableCanvas.toDataURL('image/png');
+                tableLink.click();
             });
         };
     
         img.src = url;
+    
+        Root.removeChild(document.getElementById("clone-graph"));
     });
+    
+
+    
+    // document.querySelector('.share-container').addEventListener('click', function () {
+    //     // Show the share popup
+    //     document.getElementById('share-popup').classList.remove('hidden');
+        
+    //     const svgElement = document.querySelector('.radarChart svg'); // Select the radar chart SVG
+    //     const svgData = new XMLSerializer().serializeToString(svgElement);
+    //     const canvas = document.createElement('canvas');
+    //     const ctx = canvas.getContext('2d');
+    
+    //     const img = new Image();
+    //     const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    //     const url = URL.createObjectURL(svgBlob);
+    
+    //     const width = svgElement.viewBox.baseVal.width || svgElement.getBoundingClientRect().width;
+    //     const height = svgElement.viewBox.baseVal.height || svgElement.getBoundingClientRect().height;
+    
+    //     // Set canvas size with higher resolution
+    //     const scaleFactor = 3; 
+    //     canvas.width = width * scaleFactor;
+    //     canvas.height = height * scaleFactor;
+    //     ctx.scale(scaleFactor, scaleFactor);
+    
+    //     img.onload = function () {
+    //         ctx.drawImage(img, 0, 0, width, height);
+    //         URL.revokeObjectURL(url);
+    
+    //         // Convert canvas to data URL (png format)
+    //         const pngData = canvas.toDataURL('image/png');
+    
+    //         // Twitter share URL
+    //         const twitterUrl = `https://twitter.com/intent/tweet?text=Check out this radar chart!&url=${encodeURIComponent(window.location.href)}`;
+    
+    //         // Instagram does not support direct image upload via URL, so we can prompt the user to download the image
+    //         const instagramUrl = pngData;
+    
+    //         // Facebook share URL
+    //         const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+    
+    //         // Assign URLs to share buttons
+    //         document.getElementById('share-twitter').setAttribute('href', twitterUrl);
+    //         document.getElementById('share-facebook').setAttribute('href', facebookUrl);
+    //         document.getElementById('share-instagram').addEventListener('click', function () {
+    //             const downloadLink = document.createElement('a');
+    //             downloadLink.href = pngData;
+    //             downloadLink.download = 'radar_chart.png';
+    //             downloadLink.click();
+    //         });
+    //     };
+    
+    //     img.src = url;
+    // });
     
     
     // Close the share popup
@@ -815,5 +883,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('share-popup').classList.add('hidden');
     });
 
+
+
     
 });
+

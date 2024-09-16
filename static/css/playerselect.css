@@ -344,7 +344,7 @@ select option {
     flex-grow: 1; /* Allow this element to take up remaining space */
 }
 
-.share-container {
+.download-container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -353,7 +353,7 @@ select option {
     align-self: flex-end; /* Move the share icon to the far right */
 }
 
-.share-image {
+.download-image {
     width: 30px; /* Size of the share icon */
 }
 
